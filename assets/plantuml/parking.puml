@@ -1,0 +1,225 @@
+@startuml
+
+' configures the library
+!global $INCLUSION_MODE="local"
+!global $LIB_BASE_LOCATION="./lib"
+
+' loads the library
+!include $LIB_BASE_LOCATION/eventstorm.puml
+
+' >>>>>>>>>>>>>>>>>>>>>> persons >>>>>>>>>>>>>>>>>>>>>>
+Person("CarOwner")
+Person("ParkManager")
+
+' <<<<<<<<<<<<<<<<<<<<<< persons <<<<<<<<<<<<<<<<<<<<<<
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' >>>>>>>>>>>>>>>>>>>>>> systems >>>>>>>>>>>>>>>>>>>>>>
+System("PaySystem")
+System("GateMachine")
+
+' <<<<<<<<<<<<<<<<<<<<<< systems <<<<<<<<<<<<<<<<<<<<<<
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' >>>>>>>>>>>>>>>>>>>>>> commands >>>>>>>>>>>>>>>>>>>>>>
+Command("CheckIn")[
+    CheckIn
+    --id--
+    CarNo
+    --rule--
+    1. current car to check in was not checked in before, otherwise, publish event CheckInFailed
+    2. if check in success, publish event CheckInSuccess
+]
+
+Command("CheckOut")[
+    CheckOut
+    --id--
+    CarNo
+    --rule--
+    1. current car to check out was checked in before, otherwise, publish event CheckOutFailed
+    2. the payment should be settled, otherwise, not allowed
+    3. current time should be in 15 min after the payment settled
+    3. if check out success, publish event CheckOutSuccess
+]
+
+Command("CalculatePayment")[
+    CalculatePayment
+    --id--
+    CarNo
+    --rule--
+    ...
+]
+
+
+Command("Pay")[
+    Pay
+    --id--
+    CarNo
+    Amount
+    PayTime
+    --rule--
+    ...
+]
+
+' <<<<<<<<<<<<<<<<<<<<<< commands <<<<<<<<<<<<<<<<<<<<<<
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' >>>>>>>>>>>>>>>>>>>>>> aggregates >>>>>>>>>>>>>>>>>>>>>>
+Aggregate("Park")[
+    Park
+    --id--
+    CarNo
+    --fields--
+    CheckInTime
+    TotalPayment
+    LastPayTime
+]
+
+
+' <<<<<<<<<<<<<<<<<<<<<< aggregates <<<<<<<<<<<<<<<<<<<<<<
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' >>>>>>>>>>>>>>>>>>>>>> domain events >>>>>>>>>>>>>>>>>>>>>>
+
+DomainEvent("CheckedIn")[
+    CheckedIn
+    --id--
+    CarNo
+]
+
+DomainEvent("CheckedOut")[
+    CheckedOut
+    --id--
+    CarNo
+]
+
+
+DomainEvent("ParkPaid")[
+    ParkPaid
+    --id--
+    CarNo
+    Amount
+    PayTime
+]
+
+DomainEvent("CheckInFailed")[
+    CheckInFailed
+    --id--
+    CarNo
+]
+
+DomainEvent("CheckOutFailed")[
+    CheckOutFailed
+    --id--
+    CarNo
+]
+
+' <<<<<<<<<<<<<<<<<<<<<< domain events <<<<<<<<<<<<<<<<<<<<<<
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' >>>>>>>>>>>>>>>>>>>>>> policies >>>>>>>>>>>>>>>>>>>>>>
+Policy("AlarmPolocy") [
+    AlarmPolocy
+    --rule--
+    alarm when failed to check in / check out
+]
+
+' <<<<<<<<<<<<<<<<<<<<<< policies <<<<<<<<<<<<<<<<<<<<<<
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' >>>>>>>>>>>>>>>>>>>>>> services >>>>>>>>>>>>>>>>>>>>>>
+Service("AlarmService") [
+    AlarmService
+    --fields--
+    CarNo
+    AlarmInfo
+]
+
+' <<<<<<<<<<<<<<<<<<<<<< services <<<<<<<<<<<<<<<<<<<<<<
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' >>>>>>>>>>>>>>>>>>>>>> read models >>>>>>>>>>>>>>>>>>>>>>
+ReadModel("ParkCarCount") [
+    ParkCarCount
+    --fields--
+    Count
+]
+
+ReadModel("ParkRecord") [
+    ParkRecord
+    --fields--
+    ...
+]
+
+ReadModel("DailyIncome") [
+    DailyIncome
+    --fields--
+    ...
+]
+
+' <<<<<<<<<<<<<<<<<<<<<< read models <<<<<<<<<<<<<<<<<<<<<<
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' >>>>>>>>>>>>>>>>>>>>>> flow >>>>>>>>>>>>>>>>>>>>>>
+GateMachine -d-> CheckIn
+GateMachine -d-> CheckOut
+PaySystem -d-> Pay
+CarOwner -d-> CalculatePayment
+
+CheckIn -d-> Park
+CheckOut -d-> Park
+Pay -d-> Park
+CalculatePayment -d-> Park
+
+
+Park -d-> CheckedIn
+Park -d-> CheckedOut
+Park -d-> ParkPaid
+Park -d-> CheckInFailed
+Park -d-> CheckOutFailed
+
+
+CheckInFailed -d-> AlarmPolocy
+AlarmPolocy -d-> AlarmService
+
+
+CheckedIn -d-> ParkCarCount
+CheckedIn -d-> ParkRecord
+CheckedOut -d-> ParkCarCount
+CheckedOut -d-> ParkRecord
+
+
+ParkPaid -d-> ParkRecord
+ParkPaid -d-> DailyIncome
+
+
+ParkManager -u-> ParkCarCount
+ParkManager -u-> ParkRecord
+ParkManager -u-> DailyIncome
+
+' <<<<<<<<<<<<<<<<<<<<<< flow <<<<<<<<<<<<<<<<<<<<<<
+@enduml

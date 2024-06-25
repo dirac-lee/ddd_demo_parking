@@ -1,0 +1,153 @@
+syntax = "proto2";
+package ddd.demo.parking;
+
+import "api.proto";
+
+message CheckInRequest {
+    required string car_plate = 1;
+}
+
+message CheckInResponse {
+    optional CheckInResponseData data = 1;
+
+    required int32 code = 254;
+    required string message = 255;
+}
+
+message CheckInResponseData {
+    required bool success = 1;
+}
+
+message CheckOutRequest {
+    required string car_plate = 1;
+}
+
+message CheckOutResponse {
+    optional CheckOutResponseData data = 1;
+
+    required int32 code = 254;
+    required string message = 255;
+}
+
+message CheckOutResponseData {
+    required bool success = 1;
+}
+
+message CalculateFeeRequest {
+    required string car_plate = 1;
+}
+
+message CalculateFeeResponse {
+    optional CalculateFeeResponseData data = 1;
+
+    required int32 code = 254;
+    required string message = 255;
+}
+
+message CalculateFeeResponseData {
+    required int64 fee = 1;
+}
+
+message NotifyPaidRequest {
+    required string car_plate = 1;
+    required int64 pay_amount = 2;
+}
+
+message NotifyPaidResponse {
+    optional NotifyPaidResponseData data = 1;
+
+    required int32 code = 254;
+    required string message = 255;
+}
+
+message NotifyPaidResponseData {
+    required bool success = 1;
+}
+
+
+message GetHistoryRequest {
+}
+
+message GetHistoryResponse {
+    optional GetHistoryResponseData data = 1;
+
+    required int32 code = 254;
+    required string message = 255;
+}
+
+message GetHistoryResponseData {
+    repeated ParkingRecord parking_records = 1;
+}
+
+message ParkingRecord {
+    required string car_plate = 1;
+    required int64 check_in_timestamp = 2;
+    optional int64 check_out_timestamp = 3;
+    required int64 pay_amount = 4;
+}
+
+
+message GetTotalInParkRequest {
+}
+
+message GetTotalInParkResponse {
+    optional GetTotalInParkResponseData data = 1;
+
+    required int32 code = 254;
+    required string message = 255;
+}
+
+message GetTotalInParkResponseData {
+    required int64 total_in_park = 1;
+}
+
+
+message GetDailyRevenueRequest {
+}
+
+message GetDailyRevenueResponse {
+    optional GetDailyRevenueResponseData data = 1;
+
+    required int32 code = 254;
+    required string message = 255;
+}
+
+message GetDailyRevenueResponseData {
+    repeated DailyRevenue daily_revenues = 1;
+}
+
+message DailyRevenue {
+    required string date = 1;
+    required int64 revenue = 2;
+}
+
+service DddDemoParkingService {
+    rpc CheckIn(CheckInRequest) returns (CheckInResponse) {
+        option (api.post) = "/api/ddd/demo/parking/check_in";
+        option (api.serializer) = "json";
+    }
+    rpc CheckOut(CheckOutRequest) returns (CheckOutResponse) {
+        option (api.post) = "/api/ddd/demo/parking/check_out";
+        option (api.serializer) = "json";
+    }
+    rpc CalculateFee(CalculateFeeRequest) returns (CalculateFeeResponse) {
+        option (api.post) = "/api/ddd/demo/parking/calculate_fee";
+        option (api.serializer) = "json";
+    }
+    rpc NotifyPaid(NotifyPaidRequest) returns (NotifyPaidResponse) {
+        option (api.post) = "/api/ddd/demo/parking/notify_paid";
+        option (api.serializer) = "json";
+    }
+    rpc GetHistory(GetHistoryRequest) returns (GetHistoryResponse) {
+        option (api.get) = "/api/ddd/demo/parking/history";
+        option (api.serializer) = "json";
+    }
+    rpc GetTotalInPark(GetTotalInParkRequest) returns (GetTotalInParkResponse) {
+        option (api.get) = "/api/ddd/demo/parking/total_in_park";
+        option (api.serializer) = "json";
+    }
+    rpc GetDailyRevenue(GetDailyRevenueRequest) returns (GetDailyRevenueResponse) {
+        option (api.get) = "/api/ddd/demo/parking/daily_revenue";
+        option (api.serializer) = "json";
+    }
+}
