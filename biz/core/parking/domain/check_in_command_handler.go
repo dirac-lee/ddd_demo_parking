@@ -16,7 +16,7 @@ type CheckInCommandHandler struct {
 
 func (h CheckInCommandHandler) Handle(ctx context.Context, command parking_entity.CheckInCommand) (success bool) {
 	logx.InfoInput(ctx, map[string]any{"command": command})
-	defer logx.InfoOutput(ctx, map[string]any{"success": success})
+	defer func() { logx.InfoOutput(ctx, map[string]any{"success": success}) }()
 	parking := h.ParkingRepository.FindByIdOrDefault(ctx, command.CarPlate)
 	success = parking.HandleCheckInCommand(ctx, h.EventPublisher, command)
 	h.ParkingRepository.Save(ctx, parking)

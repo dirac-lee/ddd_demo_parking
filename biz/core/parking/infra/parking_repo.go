@@ -18,16 +18,18 @@ var ProvideRepo = wire.NewSet(
 )
 
 type ParkingRepository struct {
-	Dao            *dao.Query
+	Q              *dao.Query
+	ParkingDao     dao.IParkingPoDo
 	ParkingBuilder ParkingBuilder
 }
 
 func (p ParkingRepository) Transaction(ctx context.Context, f parking_infra.ParkingTxFunc) {
-	if err := p.Dao.Transaction(func(tx *dao.Query) error {
+	if err := p.Q.Transaction(func(tx *dao.Query) error {
 		var err error
 		repoTx := ParkingRepository{
-			Dao:            tx,
+			Q:              tx,
 			ParkingBuilder: p.ParkingBuilder,
+			ParkingDao:     tx.ParkingPo.WithContext(ctx),
 		}
 		E.Try(func() {
 			f(ctx, repoTx)
@@ -42,13 +44,10 @@ func (p ParkingRepository) Transaction(ctx context.Context, f parking_infra.Park
 
 func (p ParkingRepository) FindByIdOrDefault(ctx context.Context, id parking_entity.CarPlate) (parking parking_entity.Parking) {
 	logx.InfoInput(ctx, map[string]any{"id": id})
-	defer logx.InfoOutput(ctx, map[string]any{"parking": parking})
-	po, err := p.Dao.ParkingPo.WithContext(ctx).FirstOrInit()
+	defer func() { logx.InfoOutput(ctx, map[string]any{"parking": parking}) }()
+	po, err := p.ParkingDao.WithContext(ctx).Where(p.Q.ParkingPo.ID.Eq(id.String())).FirstOrInit()
 	if err != nil {
 		E.Throw(E.New(Status.DBQueryException, E.WithCause(err)))
-	}
-	if po.ID == "" {
-		po.ID = string(id)
 	}
 	return p.ParkingBuilder.ToEntity(po)
 }
@@ -56,7 +55,7 @@ func (p ParkingRepository) FindByIdOrDefault(ctx context.Context, id parking_ent
 func (p ParkingRepository) Save(ctx context.Context, parking parking_entity.Parking) {
 	logx.InfoInput(ctx, map[string]any{"parking": parking})
 	po := p.ParkingBuilder.FromEntity(parking)
-	if err := p.Dao.ParkingPo.WithContext(ctx).Save(po); err != nil {
+	if err := p.ParkingDao.WithContext(ctx).Save(po); err != nil {
 		E.Throw(E.New(Status.DBCreateException, E.WithCause(err)))
 	}
 }

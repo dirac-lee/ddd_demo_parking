@@ -6,11 +6,7 @@ type Time struct {
 	time.Time
 }
 
-func NewTime(timestamp int64) Time {
-	return IntoTime(time.Unix(timestamp, 0))
-}
-
-func IntoTime(t time.Time) Time {
+func NewTime(t time.Time) Time {
 	return Time{Time: t}
 }
 

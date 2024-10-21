@@ -14,7 +14,7 @@ type CalculateFeeCommandHandler struct {
 
 func (h CalculateFeeCommandHandler) HandleCalculateFeeCommand(ctx context.Context, command parking_entity2.CalculateFeeCommand) (fee int64) {
 	logx.InfoInput(ctx, map[string]any{"command": command})
-	defer logx.InfoOutput(ctx, map[string]any{"fee": fee})
+	defer func() { logx.InfoOutput(ctx, map[string]any{"fee": fee}) }()
 	h.ParkingRepository.Transaction(ctx, func(ctx context.Context, repo parking_infra.ParkingRepository) {
 		var parking parking_entity2.Parking
 		parking = repo.FindByIdOrDefault(ctx, command.CarPlate)

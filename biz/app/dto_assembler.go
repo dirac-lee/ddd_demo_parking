@@ -16,8 +16,8 @@ type DtoAssembler struct {
 
 func (da DtoAssembler) ToCheckInCommand(req *ddd_demo_parking.CheckInRequest) parking_entity.CheckInCommand {
 	return parking_entity.CheckInCommand{
-		CarPlate:    parking_entity.CarPlate(req.GetCarPlate()),
-		CheckInTime: parking_entity.IntoTime(time.Now()),
+		CarPlate:    parking_entity.NewCarPlate(req.GetCarPlate()),
+		CheckInTime: parking_entity.NewTime(time.Now()),
 	}
 }
 
@@ -33,8 +33,8 @@ func (da DtoAssembler) ToCheckInResponse(success bool, ex *E.Exception) *ddd_dem
 
 func (da DtoAssembler) ToCheckOutCommand(req *ddd_demo_parking.CheckOutRequest) parking_entity.CheckOutCommand {
 	return parking_entity.CheckOutCommand{
-		CarPlate:     parking_entity.CarPlate(req.GetCarPlate()),
-		CheckOutTime: parking_entity.IntoTime(time.Now()),
+		CarPlate:     parking_entity.NewCarPlate(req.GetCarPlate()),
+		CheckOutTime: parking_entity.NewTime(time.Now()),
 	}
 }
 
@@ -51,8 +51,8 @@ func (da DtoAssembler) ToCheckOutResponse(success bool, ex *E.Exception) *ddd_de
 
 func (da DtoAssembler) ToCalculateFeeCommand(req *ddd_demo_parking.CalculateFeeRequest) parking_entity.CalculateFeeCommand {
 	return parking_entity.CalculateFeeCommand{
-		CarPlate:         parking_entity.CarPlate(req.GetCarPlate()),
-		CalculateFeeTime: parking_entity.IntoTime(time.Now()),
+		CarPlate:         parking_entity.NewCarPlate(req.GetCarPlate()),
+		CalculateFeeTime: parking_entity.NewTime(time.Now()),
 	}
 
 }
@@ -70,9 +70,9 @@ func (da DtoAssembler) ToCalculateFeeResponse(fee int64, ex *E.Exception) *ddd_d
 
 func (da DtoAssembler) ToNotifyPayCommand(req *ddd_demo_parking.NotifyPaidRequest) parking_entity.NotifyPaidCommand {
 	return parking_entity.NotifyPaidCommand{
-		CarPlate: parking_entity.CarPlate(req.GetCarPlate()),
+		CarPlate: parking_entity.NewCarPlate(req.GetCarPlate()),
 		Amount:   req.GetPayAmount(),
-		PayTime:  parking_entity.IntoTime(time.Now()),
+		PayTime:  parking_entity.NewTime(time.Now()),
 	}
 }
 
@@ -100,7 +100,7 @@ func (da DtoAssembler) viewPoToVo(po *model.ParkingViewPo) *ddd_demo_parking.Par
 	return &ddd_demo_parking.ParkingRecord{
 		CarPlate:          gptr.Of(po.Plate),
 		CheckInTimestamp:  gptr.Of(po.CheckInTime.Unix()),
-		CheckOutTimestamp: gptr.Of(po.CheckOutTime.Unix()),
+		CheckOutTimestamp: gptr.Map(po.CheckOutTime, time.Time.Unix),
 		PayAmount:         gptr.Of(po.PayAmount),
 	}
 }

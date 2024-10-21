@@ -16,7 +16,7 @@ type NotifyPaidCommandHandler struct {
 
 func (h NotifyPaidCommandHandler) HandleNotifyPayCommand(ctx context.Context, command parking_entity.NotifyPaidCommand) (success bool) {
 	logx.InfoInput(ctx, map[string]any{"command": command})
-	defer logx.InfoOutput(ctx, map[string]any{"success": success})
+	defer func() { logx.InfoOutput(ctx, map[string]any{"success": success}) }()
 	parking := h.ParkingRepository.FindByIdOrDefault(ctx, command.CarPlate)
 	parking.HandleNotifyPayCommand(ctx, h.EventPublisher, command)
 	h.ParkingRepository.Save(ctx, parking)

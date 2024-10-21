@@ -7,12 +7,12 @@
 package app
 
 import (
-	"github.com/dirac-lee/ddd_demo_parking/biz/common/id_gen"
 	"github.com/dirac-lee/ddd_demo_parking/biz/core/parking/domain"
 	"github.com/dirac-lee/ddd_demo_parking/biz/core/parking/domain/policy"
 	"github.com/dirac-lee/ddd_demo_parking/biz/core/parking/infra"
 	"github.com/dirac-lee/ddd_demo_parking/biz/sal/db"
 	"github.com/dirac-lee/ddd_demo_parking/biz/sal/db/dao"
+	"github.com/dirac-lee/ddd_demo_parking/biz/sal/id_gen"
 )
 
 // Injectors from wire.go:
@@ -20,10 +20,13 @@ import (
 func Setup() ParkingApp {
 	dtoAssembler := DtoAssembler{}
 	gormDB := db.NewDB()
-	query := dao.New(gormDB)
+	daoDao := dao.New(gormDB)
+	query := daoDao.Q
+	iParkingPoDo := daoDao.ParkingDao
 	parkingBuilder := parking_infra_impl.ParkingBuilder{}
 	parkingRepository := &parking_infra_impl.ParkingRepository{
-		Dao:            query,
+		Q:              query,
+		ParkingDao:     iParkingPoDo,
 		ParkingBuilder: parkingBuilder,
 	}
 	idGen := id_gen.New()
@@ -74,9 +77,14 @@ func Setup() ParkingApp {
 		ParkingRepository: parkingRepository,
 		EventPublisher:    syncEventPublisher,
 	}
+	iParkingViewPoDo := daoDao.ParkingViewDao
+	iSummaryPoDo := daoDao.SummaryDao
+	iDailyRevenuePoDo := daoDao.DailyRevenueDao
 	parkingQuery := ParkingQuery{
-		Dao:          query,
-		DtoAssembler: dtoAssembler,
+		ParkingViewDao:  iParkingViewPoDo,
+		SummaryDao:      iSummaryPoDo,
+		DailyRevenueDao: iDailyRevenuePoDo,
+		DtoAssembler:    dtoAssembler,
 	}
 	appParkingApp := ParkingApp{
 		DtoAssembler:               dtoAssembler,

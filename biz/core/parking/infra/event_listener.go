@@ -36,14 +36,13 @@ func (l SummaryListener) OnEvent(ctx context.Context, event domain.Event) {
 	}
 }
 
+const parkID = 7384102776687670387
+
 func (l SummaryListener) increaseCar(ctx context.Context, increment int64) {
 	summaryDao := l.Dao.SummaryPo
-	po, err := summaryDao.WithContext(ctx).FirstOrInit()
+	po, err := summaryDao.WithContext(ctx).Where(l.Dao.SummaryPo.ID.Eq(parkID)).FirstOrInit()
 	if err != nil {
 		E.Throw(E.New(Status.DBQueryException, E.WithCause(err)))
-	}
-	if po.ID == 0 {
-		po.ID = l.IDGen.GetID(ctx)
 	}
 	po.TotalInParking += increment
 	err = summaryDao.WithContext(ctx).Save(po)
@@ -123,9 +122,6 @@ func (l DailyRevenueListener) increaseRevenueByDate(ctx context.Context, date st
 	po, err := dailyRevenueDao.WithContext(ctx).Where(dailyRevenueDao.Date.Eq(date)).FirstOrInit()
 	if err != nil {
 		E.Throw(E.New(Status.DBQueryException, E.WithCause(err)))
-	}
-	if po.Date == "" {
-		po.Date = date
 	}
 	po.Revenue += amount
 	err = dailyRevenueDao.WithContext(ctx).Save(po)

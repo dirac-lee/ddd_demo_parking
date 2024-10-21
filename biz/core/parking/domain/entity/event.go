@@ -12,7 +12,7 @@ type CheckedInEvent struct {
 }
 
 func (event CheckedInEvent) EventID() string {
-	return string(event.CarPlate)
+	return event.CarPlate.String()
 }
 
 type CheckInFailedEvent struct {
@@ -24,7 +24,7 @@ type CheckInFailedEvent struct {
 }
 
 func (event CheckInFailedEvent) EventID() string {
-	return string(event.CarPlate)
+	return event.CarPlate.String()
 }
 
 type CheckOutFailedEvent struct {
@@ -36,7 +36,7 @@ type CheckOutFailedEvent struct {
 }
 
 func (event CheckOutFailedEvent) EventID() string {
-	return string(event.CarPlate)
+	return event.CarPlate.String()
 }
 
 type CheckedOutEvent struct {
@@ -47,7 +47,7 @@ type CheckedOutEvent struct {
 }
 
 func (event CheckedOutEvent) EventID() string {
-	return string(event.CarPlate)
+	return event.CarPlate.String()
 }
 
 type PaidEvent struct {
@@ -59,5 +59,5 @@ type PaidEvent struct {
 }
 
 func (event PaidEvent) EventID() string {
-	return string(event.CarPlate)
+	return event.CarPlate.String()
 }

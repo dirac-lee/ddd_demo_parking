@@ -14,9 +14,9 @@ func (b ParkingBuilder) ToEntity(po *model.ParkingPo) parking_entity.Parking {
 		return nil
 	}
 	return &parking_entity.ParkingImpl{
-		Id:          parking_entity.CarPlate(po.ID),
-		CheckInTime: gptr.Map(po.CheckInTime, parking_entity.IntoTime),
-		LastPayTime: gptr.Map(po.LastPayTime, parking_entity.IntoTime),
+		Id:          parking_entity.NewCarPlate(po.ID),
+		CheckInTime: gptr.Map(po.CheckInTime, parking_entity.NewTime),
+		LastPayTime: gptr.Map(po.LastPayTime, parking_entity.NewTime),
 		TotalPaid:   po.TotalPaid,
 	}
 }

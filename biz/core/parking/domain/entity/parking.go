@@ -4,11 +4,10 @@ import (
 	"context"
 	"time"
 
-	"code.byted.org/gopkg/logs"
 	"code.byted.org/oec/status_code/Status"
 	"github.com/dirac-lee/ddd_demo_parking/biz/common/domain"
 	E "github.com/dirac-lee/ddd_demo_parking/biz/common/exception"
-	"github.com/luci/go-render/render"
+	"github.com/dirac-lee/ddd_demo_parking/biz/common/logx"
 )
 
 const FEE_PER_HOUR = 1
@@ -18,6 +17,7 @@ type Parking interface {
 	GetCheckInTime() *Time
 	GetLastPayTime() *Time
 	GetTotalPaid() int64
+
 	HandleCheckInCommand(ctx context.Context, publisher domain.EventPublisher, command CheckInCommand) bool
 	HandleNotifyPayCommand(ctx context.Context, publisher domain.EventPublisher, command NotifyPaidCommand)
 	HandleCheckOutCommand(ctx context.Context, publisher domain.EventPublisher, command CheckOutCommand) bool
@@ -47,9 +47,11 @@ func (p *ParkingImpl) GetTotalPaid() int64 {
 	return p.TotalPaid
 }
 
-func (p *ParkingImpl) HandleCheckInCommand(ctx context.Context, publisher domain.EventPublisher, command CheckInCommand) bool {
-	logs.CtxInfo(ctx, "handle check in command: %v", render.Render(command))
+func (p *ParkingImpl) HandleCheckInCommand(ctx context.Context, publisher domain.EventPublisher, command CheckInCommand) (success bool) {
+	logx.InfoInput(ctx, map[string]any{"command": command})
+	defer func() { logx.InfoOutput(ctx, map[string]any{"success": success}) }()
 	if p.inPark() {
+		logx.Info(ctx, "car is in park, can not check in")
 		publisher.PublishEvent(ctx, CheckInFailedEvent{CarPlate: p.Id, CheckInTime: command.CheckInTime, Message: "the car is already in park, cannot check in"})
 		return false
 	}
@@ -59,17 +61,18 @@ func (p *ParkingImpl) HandleCheckInCommand(ctx context.Context, publisher domain
 	return true
 }
 
-func (p *ParkingImpl) HandleCheckOutCommand(ctx context.Context, publisher domain.EventPublisher, command CheckOutCommand) bool {
-	logs.CtxInfo(ctx, "handle check out command: %v", render.Render(command))
+func (p *ParkingImpl) HandleCheckOutCommand(ctx context.Context, publisher domain.EventPublisher, command CheckOutCommand) (success bool) {
+	logx.InfoInput(ctx, map[string]any{"command": command})
+	defer func() { logx.InfoOutput(ctx, map[string]any{"success": success}) }()
 	if !p.inPark() {
-		logs.CtxInfo(ctx, "car is not in park, can not check out")
+		logx.Info(ctx, "car is not in park, can not check out")
 		publisher.PublishEvent(ctx, CheckOutFailedEvent{CarPlate: p.Id, CheckOutTime: command.CheckOutTime, Message: "car is not in park"})
 		return false
 	}
 
 	fee := p.CalculateFee(ctx, command.CheckOutTime)
 	if fee > 0 {
-		logs.CtxInfo(ctx, "fee(%v) is not clear, can not check out", fee)
+		logx.Info(ctx, "fee(%v) is not clear, can not check out", fee)
 		return false
 	}
 
@@ -82,7 +85,7 @@ func (p *ParkingImpl) HandleCheckOutCommand(ctx context.Context, publisher domai
 }
 
 func (p *ParkingImpl) HandleNotifyPayCommand(ctx context.Context, publisher domain.EventPublisher, command NotifyPaidCommand) {
-	logs.CtxInfo(ctx, "handle notify paid command: %v", render.Render(command))
+	logx.InfoInput(ctx, map[string]any{"command": command})
 	if !p.inPark() {
 		E.Throw(E.New(Status.InvalidParam, E.WithDetail("the car is not in park, can not pay")))
 	}
@@ -93,7 +96,7 @@ func (p *ParkingImpl) HandleNotifyPayCommand(ctx context.Context, publisher doma
 }
 
 func (p *ParkingImpl) CalculateFee(ctx context.Context, now Time) (fee int64) {
-	defer func() { logs.CtxInfo(ctx, "fee: %v", fee) }()
+	defer func() { logx.InfoOutput(ctx, map[string]any{"fee": fee}) }()
 
 	if !p.inPark() {
 		E.Throw(E.New(Status.InvalidParam, E.WithDetail("the car is not in park")))
@@ -104,7 +107,7 @@ func (p *ParkingImpl) CalculateFee(ctx context.Context, now Time) (fee int64) {
 	}
 	lastPayTime0 := *p.LastPayTime
 	if p.TotalPaid < p.feeBetween(currentCheckInTime, lastPayTime0) {
-		return p.feeBetween(currentCheckInTime, IntoTime(time.Now())) - p.TotalPaid
+		return p.feeBetween(currentCheckInTime, NewTime(time.Now())) - p.TotalPaid
 	}
 	if lastPayTime0.Add(15 * time.Minute).After(now.Into()) {
 		return 0
@@ -113,13 +116,13 @@ func (p *ParkingImpl) CalculateFee(ctx context.Context, now Time) (fee int64) {
 	return p.feeBetween(currentCheckInTime, now) - p.TotalPaid
 }
 
-func (p *ParkingImpl) feeBetween(start, end Time) int64 {
+func (p *ParkingImpl) feeBetween(start, end Time) (fee int64) {
 	return p.hoursBetween(start, end) * FEE_PER_HOUR
 }
 
-func (p *ParkingImpl) hoursBetween(start, end Time) int64 {
+func (p *ParkingImpl) hoursBetween(start, end Time) (hours int64) {
 	minutes := int64(end.Sub(start.Into()).Minutes())
-	hours := minutes / 60
+	hours = minutes / 60
 	if hours*60 == minutes {
 		return hours
 	} else {

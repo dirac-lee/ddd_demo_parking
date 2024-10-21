@@ -77,9 +77,6 @@ code.byted.org/bytedtrace/serializer-go v1.0.0/go.mod h1:fOL6VcdN3BGeCIevGebxZW0
 code.byted.org/duanyi.aster/gopkg v0.0.1/go.mod h1:gxOcKCeV3yQ+J37/A3h5kQqxu/On27n+zdkZuzCbPac=
 code.byted.org/duanyi.aster/gopkg v0.0.3 h1:vQve62C3QiafPw2w8kAK/P+VVwW5Bi+p6foeVxlFydo=
 code.byted.org/duanyi.aster/gopkg v0.0.3/go.mod h1:gxOcKCeV3yQ+J37/A3h5kQqxu/On27n+zdkZuzCbPac=
-code.byted.org/golf/consul v2.1.13+incompatible/go.mod h1:EWTmdQQY1GxH8SmQpX5f9pUVJJyOu5TySHSY7FUOdE8=
-code.byted.org/golf/logger v0.0.0-20160929064355-0a0db464847e/go.mod h1:ZdQl0npP5yYzylcHPLKGe14XeA82G6+XnqOU4I1QYiE=
-code.byted.org/golf/ssconf v0.0.0-20181012074523-26ac8c57bda9/go.mod h1:Ud+oWCbPCi/b1gcXsXrzBVgkpPoSLcfrZ9FFRT+5t/Y=
 code.byted.org/gopkg/apm_vendor_interface v0.0.0-20221009080406-e34204c65cba/go.mod h1:njhrS0YBKyO11ufZKOq2xfZHR6ku4HJ9yBVszWxLQuA=
 code.byted.org/gopkg/apm_vendor_interface v0.0.2 h1:pQcmlXDXipHSD+1hNZ5SjaL/j5Q+MXvVNHAai5yhXu8=
 code.byted.org/gopkg/apm_vendor_interface v0.0.2/go.mod h1:njhrS0YBKyO11ufZKOq2xfZHR6ku4HJ9yBVszWxLQuA=
@@ -148,10 +145,6 @@ code.byted.org/gopkg/gomonkey v0.1.4 h1:ocwZR9RY/hDhkWGZPZOBGuM8TLLZHpAP0BhzZJwF
 code.byted.org/gopkg/gomonkey v0.1.4/go.mod h1:D9gdctZljmMqxpPaigoqHdRufC6h4A4qK3JLikZxkjQ=
 code.byted.org/gopkg/gopool v0.13.0/go.mod h1:1S17gaBR2gpor3NjAO+mzZrCqbI1P4AxyLPJ/XYCWMg=
 code.byted.org/gopkg/gopool v0.13.1/go.mod h1:dJOSNBfyY8VWGmH1jBlpYQj6a9y9qhfqeCY9NihuC78=
-code.byted.org/gopkg/idgenerator v1.0.15 h1:4KA4LFII6SMIBNezTDM38XUUjM4Ylo1NBnM5ZRD0bvg=
-code.byted.org/gopkg/idgenerator v1.0.15/go.mod h1:5vH7chL06zD41j4f8pp7bzoPTYY6JRkwdfJdoFqbc3U=
-code.byted.org/gopkg/idgenerator/v2 v2.0.18 h1:hyY9NKMgmxGbRjfwip/DPjZmVu/SueHRqgZsGQPMrUI=
-code.byted.org/gopkg/idgenerator/v2 v2.0.18/go.mod h1:mr5Ko4CHMWP86OUGNlUJScxhJ8UEXlvMBr2QaDgtrPs=
 code.byted.org/gopkg/lang v0.21.5/go.mod h1:4MAxdfQbkGnNy59M3sWfjIQvjf9ZoL5OyFfPZLv9y1M=
 code.byted.org/gopkg/lang v0.21.8 h1:k6HjBdfsNyzR1Ba0i3n7nURs4s91TmcVGeiVqo7c6j4=
 code.byted.org/gopkg/lang v0.21.8/go.mod h1:4MAxdfQbkGnNy59M3sWfjIQvjf9ZoL5OyFfPZLv9y1M=
@@ -230,7 +223,6 @@ code.byted.org/gopkg/metrics_core v0.0.13-0.20230406033827-5bc704c37dc0/go.mod h
 code.byted.org/gopkg/metrics_core v0.0.22/go.mod h1:8km5OS6ubXyQlQJkO9Z20TZriECbC06Xm/J4TfcCiG0=
 code.byted.org/gopkg/metrics_core v0.0.23 h1:Zub0l1FdImx9XglSWslsxsShaeJuG2jGwf/+r84g8hQ=
 code.byted.org/gopkg/metrics_core v0.0.23/go.mod h1:8km5OS6ubXyQlQJkO9Z20TZriECbC06Xm/J4TfcCiG0=
-code.byted.org/gopkg/mockito v1.1.0/go.mod h1:zYIe6/6hi5eDoWYSPbxcAUpAfCC5ouT39I5kKem+qS8=
 code.byted.org/gopkg/mockito v1.2.2/go.mod h1:rPtGZUnylHA/XLHQzNtX5in4dW7fJ1ME6h1vPrFfBxs=
 code.byted.org/gopkg/mockito v1.3.0 h1:rnHqyL1CzmFSJFFfLuxS0iToQc2jbOFDaFoNhHJQ+vQ=
 code.byted.org/gopkg/mockito v1.3.0/go.mod h1:rPtGZUnylHA/XLHQzNtX5in4dW7fJ1ME6h1vPrFfBxs=
@@ -490,7 +482,6 @@ github.com/brianvoe/gofakeit/v6 v6.16.0/go.mod h1:Ow6qC71xtwm79anlwKRlWZW6zVq9D2
 github.com/bytedance/go-tagexpr/v2 v2.9.2 h1:QySJaAIQgOEDQBLS3x9BxOWrnhqu5sQ+f6HaZIxD39I=
 github.com/bytedance/go-tagexpr/v2 v2.9.2/go.mod h1:5qsx05dYOiUXOUgnQ7w3Oz8BYs2qtM/bJokdLb79wRM=
 github.com/bytedance/gopkg v0.0.0-20210511095255-6a6cce9da51e/go.mod h1:birsdqRCbwnckJbdAvcSao+AzOyibVEoWB55MjpYpB8=
-github.com/bytedance/gopkg v0.0.0-20210525135937-d620a70479ac/go.mod h1:birsdqRCbwnckJbdAvcSao+AzOyibVEoWB55MjpYpB8=
 github.com/bytedance/gopkg v0.0.0-20210609073120-f2a1d0fc95cb/go.mod h1:birsdqRCbwnckJbdAvcSao+AzOyibVEoWB55MjpYpB8=
 github.com/bytedance/gopkg v0.0.0-20210705062217-74c74ebadcae/go.mod h1:birsdqRCbwnckJbdAvcSao+AzOyibVEoWB55MjpYpB8=
 github.com/bytedance/gopkg v0.0.0-20210709064845-3c00f9323f09/go.mod h1:birsdqRCbwnckJbdAvcSao+AzOyibVEoWB55MjpYpB8=
@@ -1497,7 +1488,6 @@ golang.org/x/tools v0.17.0/go.mod h1:xsh6VxdV005rRVaS6SSAf9oiAqljS7UZUacMZ8Bnsps
 golang.org/x/xerrors v0.0.0-20190717185122-a985d3407aa7/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
 golang.org/x/xerrors v0.0.0-20191011141410-1b5146add898/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
 golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
-golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 h1:go1bK/D/BFZV2I8cIQd1NKEZ+0owSTG1fDTci4IqFcE=
 golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
 gonum.org/v1/gonum v0.0.0-20180816165407-929014505bf4/go.mod h1:Y+Yx5eoAFn32cQvJDxZx5Dpnq+c3wtXuadVZAcxbbBo=
 gonum.org/v1/gonum v0.8.2/go.mod h1:oe/vMfY3deqTw+1EZJhuvEW2iwGF1bW9wwu7XCu0+v0=

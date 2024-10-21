@@ -11,8 +11,10 @@ import (
 )
 
 type ParkingQuery struct {
-	Dao          *dao.Query
-	DtoAssembler DtoAssembler
+	ParkingViewDao  dao.IParkingViewPoDo
+	SummaryDao      dao.ISummaryPoDo
+	DailyRevenueDao dao.IDailyRevenuePoDo
+	DtoAssembler    DtoAssembler
 }
 
 func (q ParkingQuery) GetHistory(ctx context.Context, req *ddd_demo_parking.GetHistoryRequest) (resp *ddd_demo_parking.GetHistoryResponse) {
@@ -21,7 +23,7 @@ func (q ParkingQuery) GetHistory(ctx context.Context, req *ddd_demo_parking.GetH
 	var (
 		ex *E.Exception
 	)
-	pos, err := q.Dao.ParkingViewPo.WithContext(ctx).Find()
+	pos, err := q.ParkingViewDao.WithContext(ctx).Find()
 	if err != nil {
 		ex = E.New(Status.DBQueryException, E.WithCause(err))
 	}
@@ -34,7 +36,7 @@ func (q ParkingQuery) GetTotalInPark(ctx context.Context, req *ddd_demo_parking.
 	var (
 		ex *E.Exception
 	)
-	po, err := q.Dao.SummaryPo.WithContext(ctx).FirstOrInit()
+	po, err := q.SummaryDao.WithContext(ctx).FirstOrInit()
 	if err != nil {
 		ex = E.New(Status.DBQueryException, E.WithCause(err))
 	}
@@ -47,7 +49,7 @@ func (q ParkingQuery) GetDailyRevenue(ctx context.Context, req *ddd_demo_parking
 	var (
 		ex *E.Exception
 	)
-	pos, err := q.Dao.DailyRevenuePo.WithContext(ctx).Find()
+	pos, err := q.DailyRevenueDao.WithContext(ctx).Find()
 	if err != nil {
 		ex = E.New(Status.DBQueryException, E.WithCause(err))
 	}

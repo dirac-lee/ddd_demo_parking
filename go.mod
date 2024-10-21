@@ -5,7 +5,6 @@ go 1.20
 require (
 	code.byted.org/gopkg/context v0.0.1
 	code.byted.org/gopkg/env v1.6.4
-	code.byted.org/gopkg/idgenerator/v2 v2.0.18
 	code.byted.org/gopkg/logs v1.2.23
 	code.byted.org/gopkg/logs/v2 v2.1.50
 	code.byted.org/gorm/bytedgen v0.3.26
@@ -17,6 +16,7 @@ require (
 	github.com/google/wire v0.6.0
 	github.com/luci/go-render v0.0.0-20160219211803-9a04cc21af0f
 	github.com/pkg/errors v0.9.1
+	github.com/smartystreets/goconvey v1.7.2
 	google.golang.org/protobuf v1.28.1
 	gorm.io/driver/mysql v1.5.6
 	gorm.io/gen v0.3.26
@@ -45,7 +45,6 @@ require (
 	code.byted.org/gopkg/debug v0.10.1 // indirect
 	code.byted.org/gopkg/etcd_util v2.3.3+incompatible // indirect
 	code.byted.org/gopkg/etcdproxy v0.1.1 // indirect
-	code.byted.org/gopkg/idgenerator v1.0.15 // indirect
 	code.byted.org/gopkg/lang v0.21.8 // indirect
 	code.byted.org/gopkg/logid v0.0.0-20211104042040-f78600e482f2 // indirect
 	code.byted.org/gopkg/metainfo v0.1.1 // indirect
@@ -124,6 +123,7 @@ require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/pprof v0.0.0-20221103000818-d260c55eee4c // indirect
 	github.com/google/uuid v1.3.1 // indirect
+	github.com/gopherjs/gopherjs v0.0.0-20200217142428-fce0ec30dd00 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
@@ -137,9 +137,11 @@ require (
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
+	github.com/jtolds/gls v4.20.0+incompatible // indirect
 	github.com/klauspost/compress v1.15.9 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.5 // indirect
 	github.com/magiconair/properties v1.8.5 // indirect
+	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
 	github.com/mitchellh/mapstructure v1.4.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/gls v0.0.0-20220109145502-612d0167dce5 // indirect
@@ -154,6 +156,7 @@ require (
 	github.com/power-devops/perfstat v0.0.0-20210106213030-5aafc221ea8c // indirect
 	github.com/shirou/gopsutil/v3 v3.22.1 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
+	github.com/smartystreets/assertions v1.2.0 // indirect
 	github.com/spf13/afero v1.5.1 // indirect
 	github.com/spf13/cast v1.3.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
@@ -177,7 +180,6 @@ require (
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/time v0.1.0 // indirect
 	golang.org/x/tools v0.17.0 // indirect
-	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/genproto v0.0.0-20220801145646-83ce21fca29f // indirect
 	google.golang.org/grpc v1.48.0 // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
